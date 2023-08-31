@@ -1,0 +1,183 @@
+/* styles.css */
+
+/* Define colors as CSS variables */
+:root {
+    --primary-color: #4285f4; /* Google blue */
+    --secondary-color: #ea4335; /* Google red */
+    --accent-color: #fbbc05; /* Google yellow */
+    --text-color: #333; /* Dark gray */
+    --background-color: #f9f9f9; /* Light gray */
+    --highlight-color: #ff8a80; /* Coral red */
+    --link-color: #2196f3; /* Material blue */
+  }
+  
+  /* Header Styles */
+  header {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0;
+  }
+  
+  header nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  header nav ul li {
+    display: inline-block;
+    margin-right: 1rem;
+  }
+  
+  /* Footer Styles */
+  footer {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  /* Main Content Styles */
+  .main-content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: var(--background-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .main-content h1 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--highlight-color); /* Apply coral red color to the heading */
+  }
+  
+  .main-content p {
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: var(--text-color); /* Set text color to dark gray */
+  }
+  
+  /* Upcoming Movies Styles */
+  .upcoming-movies {
+    margin-top: 2rem;
+  }
+  
+  .upcoming-movies h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: var(--secondary-color); /* Set heading color to Google red */
+  }
+  
+  .upcoming-movies ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .upcoming-movies li {
+    margin-bottom: 1rem;
+  }
+  
+  .upcoming-movies strong {
+    font-size: 1.2rem;
+    color: var(--link-color); /* Set link color to Material blue */
+    cursor: pointer;
+  }
+  
+  /* Review Styles */
+.review-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black overlay */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .review-modal {
+    background-color: #fff;
+    padding: 2rem;
+    max-width: 400px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .review-modal h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: var(--primary-color);
+  }
+  
+  .review-modal label {
+    font-size: 1.2rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+  
+  .review-modal input[type="number"],
+  .review-modal textarea {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+  
+  .review-modal .error {
+    color: #ff0000;
+    margin-bottom: 1rem;
+  }
+  
+  .review-modal button {
+    background-color: var(--primary-color);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .review-modal button.cancel {
+    background-color: #ccc;
+    margin-right: 1rem;
+  }
+  /* EditReviewForm.css */
+
+/* Styles for the modal overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Styles for the modal content (the form) */
+.modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  width: 300px;
+}
+
+/* Style for buttons in the modal */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+}
