@@ -2,11 +2,20 @@ import React, { useState,useEffect } from "react";
 import MovieItem from "./MovieItem";
 import { movies, getMovieReviews, updateMovieRatings,getLoggedInUserDetails, getUser } from "../data/repository";
 import Review from "./Review";
+import {Carousel} from "react-bootstrap";
+import '../Style/UpcomingMovies.css'; 
+import { useNavigate } from "react-router-dom"; 
+
 
 
 
 const UpcomingMovies = () => {
 
+  const navigate = useNavigate();
+
+  const handleBookTicket = (movie) => {
+    navigate("/booking", { state: { movie } });
+  }
   // Clear user review count from local storage every 10 seconds
   useEffect(() => {
   const clearReviewCountInterval = setInterval(() => {
@@ -101,16 +110,29 @@ const UpcomingMovies = () => {
   upcomingMovies.sort((a, b) => averageRatings[b.title] - averageRatings[a.title]);
 
   return (
-    <div className="upcoming-movies">
-      <h2>Upcoming Movies</h2>
+    <div className="upcoming-movies" style={{ flex: 1, overflow: 'auto' }}>
+      <Carousel>
+        {upcomingMovies.map((movie, index) => (
+          <Carousel.Item key={index}>
+            <img src={movie.corouselImage} alt={movie.title} />
+            <Carousel.Caption>
+              <h4>{movie.title}</h4>
+              <h5>{movie.sessionTime}</h5>
+            </Carousel.Caption>
+          </Carousel.Item>
+        ))}
+      </Carousel>
       <ul>
         {upcomingMovies.map((movie, index) => (
           <li key={index}>
             <MovieItem title={movie.title} sessionTime={movie.sessionTime} image ={movie.image} />
             <p>Average Rating: {averageRatings[movie.title].toFixed(1)} stars</p>
-            {getLoggedInUserDetails() && <button onClick={() => handleLeaveReview(movie.title)}>
+            {getLoggedInUserDetails() && (
+              <button onClick={() => handleLeaveReview(movie.title)}>
               Leave Review
-            </button>}
+            </button>
+            )}
+            <button onClick={() => handleBookTicket(movie)} className="mx-2">Book Tickets</button>
           </li>
         ))}
       </ul>

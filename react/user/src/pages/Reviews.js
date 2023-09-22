@@ -68,7 +68,7 @@ const ReviewsPage = () => {
           {/* Show edit and delete buttons for the review owner */}
           {loggedInUserId === review.userId && (
             <div>
-              <button onClick={() => handleEditReview(review)}>Edit Review</button>
+              <button className="mx-2" onClick={() => handleEditReview(review)}>Edit Review</button>
               <button onClick={() => handleDeleteReview(review)}>Delete Review</button>
             </div>
           )}

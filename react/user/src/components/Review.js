@@ -64,7 +64,7 @@ const Review = ({ movieTitle, onClose, onSubmitReview }) => {
           </div>
           {error && <div className="error">{error}</div>}
           <div>
-            <button type="submit">Submit Review</button>
+            <button className="mx-3" type="submit">Submit Review</button>
             <button type="button" className="cancel" onClick={onClose}>
               Cancel
             </button>
