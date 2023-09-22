@@ -9,6 +9,7 @@ import Reviews from "./pages/Reviews";
 import Signup from "./pages/Signup";
 import { getUser, removeUser } from "./data/repository";
 import './style.css';
+import Booking from "./pages/Booking";
 
 // Main App Component
 function App() {
@@ -41,6 +42,7 @@ function App() {
               <Route path="/signup" element={<Signup loginUser={loginUser}/>}/>
               <Route path="/profile" element={<MyProfile username={username} />} />
               <Route path="/reviews" element={<Reviews username={username} />} />
+              <Route path="/booking" element={<Booking username={username}/>}/>
             </Routes>
           </div>
         </main>

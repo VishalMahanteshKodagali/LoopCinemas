@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import MyBookedTickets from "../components/MyBookedTickets";
 import { updateUser, deleteUser, getLoggedInUserDetails,deleteUserMovieReviews } from "../data/repository";
+import '../Style/profile.css'; 
+
+
 
 function MyProfile(props) {
  
@@ -31,6 +35,10 @@ function MyProfile(props) {
       navigate("/");
     }, 3000);
   };
+
+  const handleCancel = () =>{
+    navigate("/profile")
+  }
 
   const handleInputChange = (event) => {
     const name = event.target.name;
@@ -63,28 +71,28 @@ function MyProfile(props) {
       setSuccessMessage(null);
     } else {
       updateUser(user.username, fields);
-      setSuccessMessage("Profile updated successfully.");
+      // setSuccessMessage("Profile updated successfully.");
       setErrorMessage(null);
       setEditMode(false);
     }
   };
 
   const renderViewMode = () => (
-    <div>
+    <div className="profile-edit-container ">
       <h1>My Profile</h1>
-      <hr />
+      <hr/>
       <div>
         <p><strong>Username:</strong> {user.username}</p>
         <p><strong>Email:</strong> {user.email}</p>
         <p><strong>Date of Joining:</strong> {user.joinDate}</p>
-        <button onClick={handleEdit}>Edit</button>
+        <button className="mx-3" onClick={handleEdit}>Edit</button>
         <button onClick={handleDelete}>Delete</button>
       </div>
     </div>
   );
 
   const renderEditMode = () => (
-    <div>
+    <div className="profile-edit-container ">
       <h1>Edit Profile</h1>
       <hr />
       <form onSubmit={handleSubmit}>
@@ -111,16 +119,19 @@ function MyProfile(props) {
           {errorMessage && <p className="text-danger">{errorMessage.email}</p>}
         </div>
         <div>
-          <button type="submit">Save</button>
+          <button className="mx-3" type="submit">Save</button>
+
+          <button onClick={handleCancel}>cancel</button>
         </div>
       </form>
     </div>
   );
 
   return (
-    <div>
+    <div className="profile-edit-container">
       {editMode ? renderEditMode() : renderViewMode()}
       {successMessage && <p className="success-message">{successMessage}</p>}
+      <MyBookedTickets/>
     </div>
   );
 }

@@ -3,21 +3,21 @@ const USER_KEY = "user";
 const MOVIE_REVIEWS = "movieReviews";
 
 const movies = [
-  { title: "Mission Impossible", sessionTime: "10:00 AM, 2:00 PM" , image:"./rsz_mi.jpg"},
-  { title: "Barbie", sessionTime: "11:00 AM, 3:00 PM" ,image:"./rsz_barbie.jpg"},
-  { title: "Oppenheimer", sessionTime: "12:00 PM, 4:00 PM" ,image:"./open.jpg"},
+  { title: "Gran Turismo", sessionTime: "10:00 AM, 2:00 PM" , image:"./gran_card.png", corouselImage:"./gran.png"},
+  { title: "Blue Beetle", sessionTime: "11:00 AM, 3:00 PM" ,image:"./blue_card.png", corouselImage:"./blue.png" },
+  { title: "Oppenheimer", sessionTime: "12:00 PM, 4:00 PM" ,image:"./oppenheimer_card.png", corouselImage:"./oppenheimer.png" },
 ]
 const movieRatings = [
   {
     movieReviewId: 1,
-    movieTitle: "Mission Impossible",
+    movieTitle: "Gran Turismo",
     rating: 4,
     comments: "Great movie, loved it!",
     userId: 1,
   },
   {
     movieReviewId: 2,
-    movieTitle: "Barbie",
+    movieTitle: "Blue Beetle",
     rating: 1,
     comments: "One of the best movies I've seen!",
     userId: 1,
