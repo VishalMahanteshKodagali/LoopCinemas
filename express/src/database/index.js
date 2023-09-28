@@ -36,7 +36,7 @@ db.session.belongsTo(db.movie, { foreignKey: { name: "movie_id", allowNull: fals
 // Include a sync option with seed data logic included.
 db.sync = async () => {
   // Sync schema. force: true - Add this parameter below if you are facing any issues with sql
-  await db.sequelize.sync({  });
+  await db.sequelize.sync({force: true});
 
   // Can sync with force if the schema has become out of date - note that syncing with force is a destructive operation.
   // await db.sequelize.sync({ force: true });
@@ -54,10 +54,23 @@ async function seedData() {
   const argon2 = require("argon2");
 
   let hash = await argon2.hash("abc123", { type: argon2.argon2id });
-  await db.user.create({ username: "yashb", password_hash: hash, first_name: "Yash", last_name : "Bhadra" });
+  await db.user.create({ username: "yashb", password_hash: hash, email: "yash@gmail.com"});
 
   hash = await argon2.hash("def456", { type: argon2.argon2id });
-  await db.user.create({ username: "shekhar", password_hash: hash, first_name: "Shekhar", last_name : "Kalra" });
-}
+  await db.user.create({ username: "vish", password_hash: hash, email : "vish@gmail.com" });
 
+  await db.movie.create({ movie_name: "Gran Turismo" });
+  await db.movie.create({ movie_name: "Blue Beetle" });
+  await db.movie.create({ movie_name: "Oppenheimer" });
+
+  await db.session.create({ session_time: "10:00:00", session_ticket_count: "10", movie_id: "1" });
+  await db.session.create({ session_time: "02:00:00", session_ticket_count: "10", movie_id: "1" });
+
+  await db.session.create({ session_time: "11:00:00", session_ticket_count: "10", movie_id: "2" });
+  await db.session.create({ session_time: "03:00:00", session_ticket_count: "10", movie_id: "2" });
+
+  await db.session.create({ session_time: "12:00:00", session_ticket_count: "10", movie_id: "3" });
+  await db.session.create({ session_time: "04:00:00", session_ticket_count: "10", movie_id: "3" });
+
+}  
 module.exports = db;

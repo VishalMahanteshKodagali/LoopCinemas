@@ -1,7 +1,7 @@
 // src/components/Signup.js
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { saveUser } from "../data/repository";
+import { saveUser, createUser } from "../data/repository";
 
 function Signup(props) {
   const [fields, setFields] = useState({
@@ -27,7 +27,7 @@ function Signup(props) {
     setFields(temp);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Perform form validation
@@ -53,13 +53,15 @@ function Signup(props) {
       setErrorMessage(validationErrors);
       setSuccessMessage(null);
     } else {
-      // Save user details to localStorage
+      
+    try {
+      // Save user details to the server
       const user = {
         username: fields.username,
         email: fields.email,
         password: fields.password,
       };
-      saveUser(user); // Implement saveUser function to store user data.
+      await saveUser(user);
 
       // Show success message
       setSuccessMessage("Registration successful! You are now logged in.");
@@ -74,7 +76,13 @@ function Signup(props) {
         setSuccessMessage(null);
         navigate("/");
       }, 3000);
+    }catch(error){
+      console.error("Error during registration:", error);
+      setErrorMessage(error.response?.data?.message || "Registration failed. Please try again.");
+      //setErrorMessage("Registration failed. Please try again.");
     }
+  }
+
   };
 
   return (

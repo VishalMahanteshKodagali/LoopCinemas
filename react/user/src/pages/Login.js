@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { verifyUser } from "../data/repository";
+import axios from "axios";
 
 function Login(props) {
   const [fields, setFields] = useState({ username: "", password: "" });
@@ -22,10 +23,11 @@ function Login(props) {
     setFields(temp);
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const verified = verifyUser(fields.username, fields.password);
+    const verified = await verifyUser(fields.username, fields.password);
+    console.log(verified)
 
     // If verified login the user.
     if(verified === true) {

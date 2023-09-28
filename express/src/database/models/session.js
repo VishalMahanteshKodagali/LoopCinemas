@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) =>
         autoIncrement: true,
         primaryKey: true
     }, session_time: {
-        type: DataTypes.DATE,
+        type: DataTypes.TIME,
         allowNull: false
     },
     session_ticket_count: {

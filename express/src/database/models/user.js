@@ -9,10 +9,10 @@ module.exports = (sequelize, DataTypes) =>
       allowNull: false
     },
     email: {
-      type: DataTypes.STRING(40),
+      type: DataTypes.STRING(255),
       allowNull: false
     }
   }, {
     // Don't add the timestamp attributes (updatedAt, createdAt).
-    timestamps: false
+    timestamps: true
   });

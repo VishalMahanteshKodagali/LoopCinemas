@@ -1,3 +1,7 @@
+import axios from "axios";
+const API_HOST = "http://localhost:4000/api";
+
+
 const USERS_KEY = "users";
 const USER_KEY = "user";
 const MOVIE_REVIEWS = "movieReviews";
@@ -57,32 +61,49 @@ function initializeLocalStorage() {
 }
 
 
-
-function getUsers() {
-  // Extract user data from local storage.
-  const data = localStorage.getItem(USERS_KEY);
-
-  // Convert data to objects.
-  return JSON.parse(data);
+async function getUsers() {
+  try {
+    const response = await axios.get(`${API_HOST}/users`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching users", error);
+    return [];
+  }
 }
 
-function verifyUser(username, password) {
-  const users = getUsers();
-  for(const user of users) {
-    if(username === user.username && password === user.password)
-    {
-      setUser(username);
+async function verifyUser(username, password) {
+  // Define the URL for your API login endpoint
+  const apiUrl = `http://localhost:4000/api/users/login?username=${username}&password=${password}`;
+  
+  try {
+    // Make a GET request to the login endpoint
+    const response = await axios.get(apiUrl);
+    
+    console.log(apiUrl);
+    // If the request is successful, set the user and return true
+    if (response.data) {
+      setUser(response.data.username); // Assuming response.data contains the user data
+      console.log(response.data)
       return true;
     }
+    
+  } catch (error) {
+    // Log the error if the request failed
+    console.error('Error during authentication:', error);
   }
-
+  // Return false if the authentication failed
   return false;
 }
 
-function setUser(username) {
-  localStorage.setItem(USER_KEY, username);
-}
 
+async function setUser(username) {
+  try {
+    localStorage.setItem(USER_KEY, username);
+  } catch (error) {
+    // Log any error that occurs during the API call
+    console.error('Error setting user:', error);
+  }
+}
 
 function getUser() {
   return localStorage.getItem(USER_KEY);
@@ -91,43 +112,45 @@ function getUser() {
 function removeUser() {
   localStorage.removeItem(USER_KEY);
 }
-function saveUser(user){
-  const users = getUsers();
-  users.push(user);
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  setUser(user.username);
-}
-function updateUser(currentUsername,fields){
-  const users = getUsers();
-  for(const user of users) {
-    if(currentUsername === user.username)
-    {
-      user.username = fields.username;
-      user.email = fields.email;
-      setUser(user.username);
-      break;
-    }
-  }
-  
 
-  localStorage.setItem(USERS_KEY, JSON.stringify(users));
+async function saveUser(user) {
+  try {
+    const response = await axios.post(`${API_HOST}/users`, user);
+    setUser(user.username);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 }
-function deleteUser(username){
-  let users = getUsers();
-  users = users.filter(
-    (u) => u.userId === username 
-  )
-  localStorage.setItem(USERS_KEY, JSON.stringify(users)); 
-  removeUser();
-  window.location.href = "http://localhost:3000/login";
-  
+
+async function updateUser(currentUsername, fields) {
+  try {
+    const response = await axios.put(`http://localhost:4000/api/users/${currentUsername}`, fields);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating user:', error);
+    throw error;
+  }
 }
+
+async function deleteUser(username) {
+  try {
+    await axios.delete(`${API_HOST}/users/${username}`);
+    removeUser();
+    window.location.href = "http://localhost:3003/login";
+  } catch (error) {
+    console.error("Error deleting user", error);
+  }
+}
+
+
 function getMovieReviews(){
   const data = localStorage.getItem(MOVIE_REVIEWS);
-
   // Convert data to objects.
   return JSON.parse(data);
 }
+
+
 function deleteMovieReviews(selectedReview){
   
 
@@ -181,16 +204,17 @@ function updateMovieRatings(rating){
   localStorage.setItem(MOVIE_REVIEWS, JSON.stringify(movieReviews));
  
 }
-function getLoggedInUserDetails(){
-  let tempUser = getUser()
-  const users = getUsers();
-  for(const user of users) {
-    if(tempUser === user.username )
-    {
-      return user
-    }
-  }
+
+
+async function getLoggedInUserDetails(){
+  let tempUser = getUser();
+  const apiUrl = "http://localhost:4000/api/users/"+getUser();
+  const response = await axios.get(apiUrl);
+  return response.data;
 }
+
+
+
 function deleteUserMovieReviews(username){
   let reviews = getMovieReviews();
   reviews = reviews.filter(review=> review.userId !== username);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MyBookedTickets from "../components/MyBookedTickets";
 import { updateUser, deleteUser, getLoggedInUserDetails,deleteUserMovieReviews } from "../data/repository";
@@ -7,36 +7,91 @@ import '../Style/profile.css';
 
 
 function MyProfile(props) {
- 
-  const user = getLoggedInUserDetails(); // Destructure the user object from props
-  console.log(user)
+
+  const [user, setUser] = useState({});
+  const getUserDetails = async () => {
+    const user = await getLoggedInUserDetails(); 
+    console.log(user);
+    setUser(user);
+  }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchedUser = await getLoggedInUserDetails(); 
+      setUser(fetchedUser);
+      setFields({
+        username: fetchedUser.username,
+        email: fetchedUser.email,
+        password: "", 
+        confirmPassword: "", 
+        createdAt: fetchedUser.createdAt,
+      });
+    }
+  
+    fetchData();
+  }, []);
+
   const [editMode, setEditMode] = useState(false);
   const [fields, setFields] = useState({
-    username: user.username,
-    email: user.email,
+    username: "",
+    email:"",
     password: "", 
     confirmPassword: "", 
+    createdAt: "",
   });
+
+
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      const user = await getLoggedInUserDetails();
+      setUser(user);
+      setFields({ username: user.username, email: user.email });
+    };
+    
+    fetchUserDetails();
+  }, []);
+
+
 
   const handleEdit = () => {
     setEditMode(true);
   };
 
-  const handleDelete = () => {
-    // Delete the user here (you need to implement the deleteUser function)
-    deleteUserMovieReviews(user.username);
-    deleteUser(user.username);
-    setSuccessMessage("Profile deleted successfully.");
-    // Redirect to the home page after successful delete
-    setTimeout(() => {
-      navigate("/");
-    }, 3000);
-  };
+  // const handleDelete = () => {
+  //   // Delete the user here (you need to implement the deleteUser function)
+  //   deleteUserMovieReviews(user.username);
+  //   deleteUser(user.username);
+  //   setSuccessMessage("Profile deleted successfully.");
+  //   // Redirect to the home page after successful delete
+  //   setTimeout(() => {
+  //     navigate("/");
+  //   }, 3000);
+  // };
 
-  const handleCancel = () =>{
+  const handleDelete = () => {
+    console.log(user.username); // Log the username to debug
+    if (user.username) {
+     // deleteUserMovieReviews(user.username);
+      deleteUser(user.username);
+      setSuccessMessage("Profile deleted successfully.");
+      // Redirect to the home page after successful delete
+      setTimeout(() => {
+        navigate("/");
+      }, 3000);
+    } else {
+      console.error("Username is undefined");
+    }
+};
+
+
+
+  const handleCancel = (event) =>{
+    event.preventDefault();
+    setEditMode(false);
     navigate("/profile")
   }
 
@@ -52,7 +107,7 @@ function MyProfile(props) {
     setFields(temp);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     // Perform form validation
@@ -69,12 +124,26 @@ function MyProfile(props) {
     if (Object.keys(validationErrors).length > 0) {
       setErrorMessage(validationErrors);
       setSuccessMessage(null);
-    } else {
-      updateUser(user.username, fields);
-      // setSuccessMessage("Profile updated successfully.");
-      setErrorMessage(null);
-      setEditMode(false);
+    } else 
+    // {
+    //   updateUser(user.username, fields);
+    //   // setSuccessMessage("Profile updated successfully.");
+    //   setErrorMessage(null);
+    //   setEditMode(false);
+    // }
+    {
+      try {
+        const updatedUser = await updateUser(user.username, fields);
+        setUser(updatedUser);
+        window.location.reload();
+        setSuccessMessage("Profile updated successfully.");
+        setErrorMessage(null);
+        setEditMode(false);
+      } catch (error) {
+        setErrorMessage({ apiError: 'Error updating profile' });
+      }
     }
+   
   };
 
   const renderViewMode = () => (
@@ -84,7 +153,7 @@ function MyProfile(props) {
       <div>
         <p><strong>Username:</strong> {user.username}</p>
         <p><strong>Email:</strong> {user.email}</p>
-        <p><strong>Date of Joining:</strong> {user.joinDate}</p>
+        <p><strong>Joined:</strong> {user.createdAt}</p>
         <button className="mx-3" onClick={handleEdit}>Edit</button>
         <button onClick={handleDelete}>Delete</button>
       </div>
@@ -98,14 +167,18 @@ function MyProfile(props) {
       <form onSubmit={handleSubmit}>
         {/* Form fields and validation messages */}
         <div>
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="username">Username: {fields.username}</label>
+        </div>
+        <div>
+          <label htmlFor="password">Password:</label>
           <input
-            name="username"
-            id="username"
-            value={fields.username}
+            name="password"
+            id="password"
+            type="password"
+            value={fields.password}
             onChange={handleInputChange}
           />
-          {errorMessage && <p className="text-danger">{errorMessage.username}</p>}
+          {errorMessage && <p className="text-danger">{errorMessage.password}</p>}
         </div>
         <div>
           <label htmlFor="email">Email:</label>
@@ -120,8 +193,7 @@ function MyProfile(props) {
         </div>
         <div>
           <button className="mx-3" type="submit">Save</button>
-
-          <button onClick={handleCancel}>cancel</button>
+          <button onClick={(event) => handleCancel(event)}>Cancel</button>
         </div>
       </form>
     </div>
