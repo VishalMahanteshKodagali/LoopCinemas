@@ -36,7 +36,7 @@ db.session.belongsTo(db.movie, { foreignKey: { name: "movie_id", allowNull: fals
 // Include a sync option with seed data logic included.
 db.sync = async () => {
   // Sync schema. force: true - Add this parameter below if you are facing any issues with sql
-  await db.sequelize.sync({force: true});
+  await db.sequelize.sync({ });
 
   // Can sync with force if the schema has become out of date - note that syncing with force is a destructive operation.
   // await db.sequelize.sync({ force: true });
@@ -58,6 +58,9 @@ async function seedData() {
 
   hash = await argon2.hash("def456", { type: argon2.argon2id });
   await db.user.create({ username: "vish", password_hash: hash, email : "vish@gmail.com" });
+
+  hash = await argon2.hash("admin", { type: argon2.argon2id });
+  await db.user.create({ username: "admin", password_hash: hash, email : "admin@loopcinema.com" });
 
   await db.movie.create({ movie_name: "Gran Turismo" });
   await db.movie.create({ movie_name: "Blue Beetle" });
