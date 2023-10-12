@@ -11,6 +11,14 @@ module.exports = (sequelize, DataTypes) =>
     email: {
       type: DataTypes.STRING(255),
       allowNull: false
+    },
+    role: {
+      type: DataTypes.STRING(255),
+      allowNull: false
+    },
+    isBlocked: {
+      type: DataTypes.INTEGER(255),
+      allowNull: false
     }
   }, {
     // Don't add the timestamp attributes (updatedAt, createdAt).

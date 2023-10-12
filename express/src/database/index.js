@@ -54,14 +54,14 @@ async function seedData() {
   const argon2 = require("argon2");
 
   let hash = await argon2.hash("abc123", { type: argon2.argon2id });
-  await db.user.create({ username: "yashb", password_hash: hash, email: "yash@gmail.com"});
+  await db.user.create({ username: "yashb", password_hash: hash, email: "yash@gmail.com", role:"user",isBlocked:"0"});
 
   hash = await argon2.hash("def456", { type: argon2.argon2id });
-  await db.user.create({ username: "vish", password_hash: hash, email : "vish@gmail.com" });
+  await db.user.create({ username: "vish", password_hash: hash, email : "vish@gmail.com", role:"user",isBlocked:"0" });
 
-  await db.movie.create({ movie_name: "Gran Turismo" });
-  await db.movie.create({ movie_name: "Blue Beetle" });
-  await db.movie.create({ movie_name: "Oppenheimer" });
+  await db.movie.create({ movie_name: "Gran Turismo" ,image:"./gran_card.png", corouselImage:"./gran.png"});
+  await db.movie.create({ movie_name: "Blue Beetle" ,image:"./blue_card.png", corouselImage:"./blue.png"});
+  await db.movie.create({ movie_name: "Oppenheimer" ,image:"./oppenheimer_card.png", corouselImage:"./oppenheimer.png"});
 
   await db.session.create({ session_time: "10:00:00", session_ticket_count: "10", movie_id: "1" });
   await db.session.create({ session_time: "02:00:00", session_ticket_count: "10", movie_id: "1" });
@@ -71,6 +71,9 @@ async function seedData() {
 
   await db.session.create({ session_time: "12:00:00", session_ticket_count: "10", movie_id: "3" });
   await db.session.create({ session_time: "04:00:00", session_ticket_count: "10", movie_id: "3" });
+
+  await db.review.create({ review_rating: 4, review_description: "Great movie, loved it!!!!", username: "yashb", movie_id:'1' });
+  await db.review.create({ review_rating: 4, review_description: "Awesome!!!", username: "yashb", movie_id:'2' });
 
 }  
 module.exports = db;

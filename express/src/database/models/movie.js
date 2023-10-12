@@ -8,6 +8,12 @@ module.exports = (sequelize, DataTypes) =>
     movie_name: {
       type: DataTypes.STRING(40),
       allowNull: false
+    },image: {
+      type: DataTypes.STRING(40),
+      allowNull: true
+    },corouselImage:{
+      type: DataTypes.STRING(40),
+      allowNull: true
     }
   }, {
     // Don't add the timestamp attributes (updatedAt, createdAt).
