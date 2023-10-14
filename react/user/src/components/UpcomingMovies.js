@@ -116,7 +116,6 @@ const UpcomingMovies = () => {
   setUserReviewCount(updatedReviewCount);
 
   // Store the updated review count in local storage
-  localStorage.setItem('userReviewCount', JSON.stringify(updatedReviewCount));
   const username = getUser();
     // Save the review data to a localStorage.
     const movieReview = {

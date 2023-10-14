@@ -206,31 +206,27 @@ async function editMovieRatings(selectedMoviewReview) {
   try {
     const response = await axios.put(`${API_HOST}/reviews`, selectedMoviewReview);
 
-    alert("Review updated successfully!"+response.data);
+    console.log("Review updated successfully!"+response.data);
 
   } catch (error) {
-    alert("Error creating reservation:"+ error);
+    console.log("Error creating reservation:"+ error);
 
   } 
     
 
 }
 
-function deleteMovieReviewbyId(selectedReview){
+async function deleteMovieReviewbyId(selectedReview){
   
-  const reviews = getMovieReviews();
-  for(const r of reviews) {
-      if(r.movieReviewId === selectedReview.movieReviewId)
-      {
-        var index = reviews.indexOf(r);
-        if (index !== -1) {
-          reviews.splice(index, 1);
-      }
-    }
-  }
+  try {
+    const response = await axios.delete(`${API_HOST}/reviews/`+selectedReview.review_id);
 
-  localStorage.setItem(MOVIE_REVIEWS, JSON.stringify(reviews));
+    console.log("Review updated successfully!"+response.data);
+
+  } catch (error) {
+    console.log("Error creating reservation:"+ error);
   
+}
 }
 async function updateMovieRatings(rating){
 
@@ -277,6 +273,5 @@ export {
   deleteMovieReviewbyId,
   editMovieRatings,
   getMovies,
-  getLoggedInUser,
-  getUserBookings
+  getLoggedInUser
 }

@@ -40,23 +40,21 @@ const ReviewsPage = () => {
   };
 
   // Function to handle deleting a review
-  const handleDeleteReview = (review) => {
-    // Remove the review from the state
-    setReviews((prevReviews) =>
-      prevReviews.filter(
-        (r) => r.movieReviewId !== review.movieReviewId
-      )
-    );
-    // Delete the review from the data source
-    deleteMovieReviewbyId(review);
+  const handleDeleteReview = async (review) => {
+
+    await deleteMovieReviewbyId(review);
+    fetchMovieReviews();
+
   };
 
   // Function to update a review after editing
-  const updateReview = (updatedReview) => {
+  const updateReview = async (updatedReview) => {
     // Update the review in the state
   
-    editMovieRatings(updatedReview);
+    await editMovieRatings(updatedReview);
     fetchMovieReviews();
+    
+
     // Exit edit mode
     setEditMode(false);
     setSelectedReview(null);

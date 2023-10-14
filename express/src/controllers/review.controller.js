@@ -12,19 +12,7 @@ exports.all = async (req, res) => {
   res.json(reviews);
 };
 
-exports.create = async (req, res) => {
-  const {
-    movie_id,
-    review_rating,
-    review_description,
-    username,
-  } = req.body;
-  console.log(req.body)
 
-  // Check for missing required fields
-  if (!movie_id,!review_description || !username || !review_rating) {
-    return res.status(400).json({ message: "Missing required fields" });
-  }
   exports.create = async (req, res) => {
     const {
       movie_id,
@@ -53,20 +41,6 @@ exports.create = async (req, res) => {
       res.status(500).json({ message: "Internal server error" });
     }
   };
-  try {
-    const review = await db.review.create({
-      review_description,
-      username,
-      movie_id,
-      review_rating
-    });
-    
-    res.json(review);
-  } catch (error) {
-    console.error("Error creating review:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
 
 
 // Delete a review from the database by review_id.
