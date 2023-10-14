@@ -4,6 +4,7 @@ const API_HOST = "http://localhost:4000/api";
 
 const USERS_KEY = "users";
 const USER_KEY = "user";
+const USER_DETAILS_KEY = "userDetails";
 const MOVIE_REVIEWS = "movieReviews";
 
 const movies = [
@@ -70,6 +71,16 @@ async function getUsers() {
     return [];
   }
 }
+function getMovies() {
+  return movies;
+  /*try {
+    const response = await axios.get(`${API_HOST}/movies`);
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching users", error);
+    return [];
+  }*/
+}
 
 async function verifyUser(username, password) {
   // Define the URL for your API login endpoint
@@ -79,11 +90,10 @@ async function verifyUser(username, password) {
     // Make a GET request to the login endpoint
     const response = await axios.get(apiUrl);
     
-    console.log(apiUrl);
     // If the request is successful, set the user and return true
     if (response.data) {
-      setUser(response.data.username); // Assuming response.data contains the user data
-      console.log(response.data)
+      setUser(response.data)
+   
       return true;
     }
     
@@ -94,11 +104,34 @@ async function verifyUser(username, password) {
   // Return false if the authentication failed
   return false;
 }
-
-
-async function setUser(username) {
+async function getUserBookings() {
+  // Define the URL for your API login endpoint
+  const apiUrl = `http://localhost:4000/api/reservations/`+getUser();
+  
   try {
-    localStorage.setItem(USER_KEY, username);
+    // Make a GET request to the login endpoint
+    const response = await axios.get(apiUrl);
+    
+    // If the request is successful, set the user and return true
+    if (response.data) {   
+      return response.data;
+    }
+    
+  } catch (error) {
+    // Log the error if the request failed
+    console.error('Error during booking fetch:', error);
+  }
+  // Return false if the authentication failed
+  return [];
+}
+
+
+
+function setUser(user) {
+  try {
+    localStorage.setItem(USER_KEY, user.username);
+    localStorage.setItem(USER_DETAILS_KEY, JSON.stringify(user));   
+
   } catch (error) {
     // Log any error that occurs during the API call
     console.error('Error setting user:', error);
@@ -116,7 +149,8 @@ function removeUser() {
 async function saveUser(user) {
   try {
     const response = await axios.post(`${API_HOST}/users`, user);
-    setUser(user.username);
+
+    setUser(response.data);
     return response.data;
   } catch (error) {
     throw error;
@@ -168,49 +202,48 @@ function deleteMovieReviews(selectedReview){
   localStorage.setItem(MOVIE_REVIEWS, JSON.stringify(reviews));
   
 }
-function editMovieRatings(selectedMoviewReview) {
-  //deleteMovieReviewbyId(selectedMoviewReview);
-  console.log("Before",getMovieReviews())
-  const reviews = getMovieReviews().map((r) =>
-    r.movieReviewId === selectedMoviewReview.movieReviewId
-      ? selectedMoviewReview
-      : r
-  );
+async function editMovieRatings(selectedMoviewReview) {
+  try {
+    const response = await axios.put(`${API_HOST}/reviews`, selectedMoviewReview);
 
-  localStorage.setItem(MOVIE_REVIEWS, JSON.stringify(reviews));
-  console.log("After",getMovieReviews())
+    console.log("Review updated successfully!"+response.data);
+
+  } catch (error) {
+    console.log("Error creating reservation:"+ error);
+
+  } 
+    
 
 }
 
-function deleteMovieReviewbyId(selectedReview){
+async function deleteMovieReviewbyId(selectedReview){
   
-  const reviews = getMovieReviews();
-  for(const r of reviews) {
-      if(r.movieReviewId === selectedReview.movieReviewId)
-      {
-        var index = reviews.indexOf(r);
-        if (index !== -1) {
-          reviews.splice(index, 1);
-      }
-    }
+  try {
+    const response = await axios.delete(`${API_HOST}/reviews/`+selectedReview.review_id);
+
+    console.log("Review updated successfully!"+response.data);
+
+  } catch (error) {
+    console.log("Error creating reservation:"+ error);
+  
+}
+}
+async function updateMovieRatings(rating){
+
+  try {
+    const response = await axios.post(`${API_HOST}/reviews`, rating);
+    console.log(response.data);
+  } catch (error) {
+    throw error;
   }
-
-  localStorage.setItem(MOVIE_REVIEWS, JSON.stringify(reviews));
-  
-}
-function updateMovieRatings(rating){
-  const movieReviews = getMovieReviews();
-  movieReviews.push(rating);
-  localStorage.setItem(MOVIE_REVIEWS, JSON.stringify(movieReviews));
- 
 }
 
 
 async function getLoggedInUserDetails(){
-  let tempUser = getUser();
-  const apiUrl = "http://localhost:4000/api/users/"+getUser();
-  const response = await axios.get(apiUrl);
-  return response.data;
+  return getUser(); 
+}
+async function getLoggedInUser(){
+  return JSON.parse(localStorage.getItem(USER_DETAILS_KEY));
 }
 
 
@@ -238,5 +271,7 @@ export {
   deleteMovieReviews,
   deleteUserMovieReviews,
   deleteMovieReviewbyId,
-  editMovieRatings
+  editMovieRatings,
+  getMovies,
+  getLoggedInUser
 }

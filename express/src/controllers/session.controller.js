@@ -81,3 +81,26 @@ exports.delete = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+  exports.getSessionsByMovie = async (req, res) => {
+    try {
+      const sessions = await db.session.findAll({where: { movie_id: req.params.movieId }
+      });
+      res.json(sessions);
+    } catch (error) {
+      console.error("Error fetching sessions:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  };
+  
+// Select all sessions from the database.
+exports.getSessionById = async (req, res) => {
+  try {
+    const session = await db.session.findByPk(req.params.sessionId);
+    res.json(session);
+  } catch (error) {
+    console.error("Error fetching sessions:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+  

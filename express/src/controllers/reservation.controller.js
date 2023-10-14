@@ -1,4 +1,6 @@
 const db = require("../database");
+const Session = require('../database/models/session');
+const Movie = require('../database/models/movie');
 
 // Select all reservations from the database.
 exports.all = async (req, res) => {
@@ -11,14 +13,31 @@ exports.all = async (req, res) => {
   }
 };
 
+exports.getByUserName = async (req, res) => {
+  try {
+    const reservations = await db.reservation.findAll({
+      where: {
+        username: req.params.userName,
+      },
+      include: [
+        {
+          model: db.session,
+          include: [db.movie],
+        },
+      ],
+    })
+    res.json(reservations);
+  } catch (error) {
+    console.error("Error fetching reservations:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 // Create a reservation in the database.
 exports.create = async (req, res) => {
-  const { username, session_id, reservation_ticket_count } = req.body;
+  const { username, reservation_ticket_count,session_id } = req.body;
 
-  // Check for missing required fields
-  if (!username || !session_id || !reservation_ticket_count) {
-    return res.status(400).json({ message: "Missing required fields" });
-  }
+
 
   try {
     const reservation = await db.reservation.create({
@@ -26,7 +45,24 @@ exports.create = async (req, res) => {
       session_id,
       reservation_ticket_count
     });
-    res.json(reservation);
+    const updatedData = {
+      session_ticket_count: db.sequelize.literal(`session_ticket_count - ${req.body.reservation_ticket_count}`),
+    };
+  
+    try {
+      const [updatedRowsCount] = await db.session.update(updatedData, {
+        where: { session_id: session_id }
+      });
+  
+      if (updatedRowsCount === 0) {
+        return res.status(404).json({ message: "Session not found" });
+      }
+  
+      res.json(reservation)   
+ } catch (error) {
+      console.error("Error updating session:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
   } catch (error) {
     console.error("Error creating reservation:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -40,7 +76,7 @@ exports.update = async (req, res) => {
     //Not letting the reservations details to be updated on purpose
     //username: req.body.username,
     //session_id: req.body.session_id,
-    reservation_ticket_count: req.body.reservation_ticket_count
+    reservation_ticket_count: req.body.session_ticket_count,
   };
 
   // Check for missing required fields

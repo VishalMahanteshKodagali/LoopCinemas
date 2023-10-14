@@ -13,7 +13,7 @@ module.exports = (express, app) => {
     //Sample
     //localhost:4000/api/reviews/1
 
-    router.put("/:reviewId",controller.update);
+    router.put("/",controller.update);
     //Sample
     //localhost:4000/api/reviews/1
   

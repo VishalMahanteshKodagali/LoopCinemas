@@ -65,7 +65,11 @@ exports.update = async (req, res) => {
     }
     await user.update(updatedFields);
 
-    res.status(200).send({ message: 'User updated successfully!' });
+    const user1 = await db.user.findByPk(username);
+
+
+    res.status(200);
+    res.json(user1)
   } catch (error) {
     console.error('Error updating user:', error);
     res.status(500).send({ message: 'Error updating user' });

@@ -4,6 +4,7 @@ module.exports = (express, app) => {
   
     // Select all posts.
     router.get("/", controller.all);
+    router.get("/:movieId",controller.getMovieId);
   
     // Create a new post.
     router.post("/", controller.create);
