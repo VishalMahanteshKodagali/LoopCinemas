@@ -4,6 +4,9 @@ module.exports = (express, app) => {
   
     // Select all reservations.
     router.get("/", controller.all);
+
+        // Select all reservations.
+    router.get("/:userName", controller.getByUserName);
   
     // Create a new reservation.
     router.post("/", controller.create);

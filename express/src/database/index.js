@@ -62,8 +62,8 @@ async function seedData() {
   await db.movie.create({ movie_name: "Gran Turismo" ,image:"./gran_card.png", corouselImage:"./gran.png"});
   await db.movie.create({ movie_name: "Blue Beetle" ,image:"./blue_card.png", corouselImage:"./blue.png"});
   await db.movie.create({ movie_name: "Oppenheimer" ,image:"./oppenheimer_card.png", corouselImage:"./oppenheimer.png"});
-  hash = await argon2.hash("admin", { type: argon2.argon2id });
-  await db.user.create({ username: "admin", password_hash: hash, email : "admin@loopcinema.com" });
+  //hash = await argon2.hash("admin", { type: argon2.argon2id });
+  //await db.user.create({ username: "admin", password_hash: hash, email : "admin@loopcinema.com" });
 
 
 

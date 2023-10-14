@@ -75,3 +75,22 @@ exports.delete = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+// Delete a movie from the database by movie_id.
+exports.getMovieId = async (req, res) => {
+  const movieId = req.params.movieId; // Assuming you pass movieId as a URL parameter
+
+  try {
+    const movie = await db.movie.findByPk(movieId);
+
+    if (!movie) {
+      return res.status(404).json({ message: "Movie not found" });
+    }
+
+    res.json(movie);
+    res.status(200).send(); // Respond with a 204 No Content status for a successful delete
+  } catch (error) {
+    console.error("Error deleting movie:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

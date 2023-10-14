@@ -2,15 +2,17 @@ import React, { useState, useEffect } from "react";
 import { getLoggedInUserDetails } from "../data/repository";
 import "../Style/bookTickets.css";
 import { useNavigate } from "react-router-dom"; 
+import axios from "axios";
+import { getUser} from "../data/repository";
 
+const API_HOST = "http://localhost:4000/api";
 
-const BookTickets = ({ movie }) => {
+const BookTickets = ({ movie,sessions }) => {
  
   const [ticketCount, setTicketCount] = useState(1);
   const [selectedSession, setSelectedSession] = useState(0);
-  const [availableTickets, setAvailableTickets] = useState(10); // 0 for the first session, 1 for the second
+  const [availableTickets, setAvailableTickets] = useState(0); // 0 for the first session, 1 for the second
   const user = getLoggedInUserDetails();
-  const username = user ? user.username : "Guest User";
 
   const navigate = useNavigate();
 
@@ -18,52 +20,57 @@ const BookTickets = ({ movie }) => {
     navigate("/");
   }
 
-  useEffect(() => {
-    const sessionKey = `${movie.title}_session${selectedSession}`;
-    const bookingData = JSON.parse(localStorage.getItem("bookingData")) || {};
-    const bookedTickets = bookingData[sessionKey] || 0;
-    setAvailableTickets(10 - bookedTickets);
-  }, [selectedSession, movie.title]);
 
- 
-  const handleSessionChange = (sessionIndex) => {
-    setSelectedSession(parseInt(sessionIndex, 10));
-  };
+  const handleSessionChange = async (sessionId) => {
+    if(sessionId != "None"){
+      try {
+        const response = await axios.get(`${API_HOST}/sessions/`+sessionId)// Replace with the actual endpoint URL
+        setAvailableTickets(response.data.session_ticket_count); // Assuming the data is in response.data
+        setSelectedSession(sessionId)
+        console.log(selectedSession)
+      } catch (error) {
+        console.error("Error fetching movie reviews:", error);
+      }
+    }else{
+      setSelectedSession(0)
 
-  
-  const handleTicketCountChange = (event) => {
-    const count = parseInt(event.target.value, 10);
-    setTicketCount(count);
-  };
-
- 
-  const handleBookTickets = () => {
-    const bookingData = JSON.parse(localStorage.getItem("bookingData")) || {};
-
-    
-    const sessionKey = `${movie.title}_session${selectedSession}`;
-    const availableTickets = 10 - (bookingData[sessionKey] || 0);
-
-    if (ticketCount > availableTickets) {
-      alert(`Only ${availableTickets} tickets are available for this session.`);
-      return;
     }
+    
+  };
+ 
+  const handleBookTickets = async () => { 
+    if(selectedSession != 0){
+      if ((availableTickets-ticketCount) >= 0){
+        const username = getUser()
+  
+        try {
+          const reservationData = {
+            reservation_ticket_count: ticketCount,
+            username: username,
+            session_id: selectedSession,
+          };
+          const response = await axios.post(`${API_HOST}/reservations`, reservationData);
+      
+          alert("Reservation created successfully!"+response.data);
+          await handleSessionChange(selectedSession);
+    
 
-    const booking = {
-        username: username,
-        movieName: movie.title,
-        session: `Session ${selectedSession + 1}`,
-        ticketCount: ticketCount,
-      };
+        } catch (error) {
+          alert("Error creating reservation:"+ error);
 
-    const userBookingHistory = JSON.parse(localStorage.getItem(username)) || [];
-    userBookingHistory.push(booking);
-    localStorage.setItem(username, JSON.stringify(userBookingHistory));
-
-    bookingData[sessionKey] = (bookingData[sessionKey] || 0) + ticketCount;
-    localStorage.setItem("bookingData", JSON.stringify(bookingData));
-
-    alert(`Successfully booked ${ticketCount} ticket(s) for ${movie.title}.`);
+        } 
+      }else{
+        alert("The number you selected is more than the available seats")
+      }
+    }else{
+      alert("Please select a valid session")
+    }
+    
+    
+  };
+  const handleTicketCountChange = (e) => {
+    const newCount = parseInt(e.target.value, 10);
+    setTicketCount(newCount);
   };
 
   return (
@@ -72,11 +79,16 @@ const BookTickets = ({ movie }) => {
       <div className="session-selection">
         <label>Select Session:</label>
         <select
-          value={selectedSession}
           onChange={(e) => handleSessionChange(e.target.value)}
         >
-          <option value={0}>Session 1</option>
-          <option value={1}>Session 2</option>
+          <option key="None" value="None">
+              None
+            </option>
+          {sessions.map((session) => (
+            <option key={session.session_time} value={session.session_id}>
+              {session.session_time}
+            </option>
+          ))}
         </select>
       </div>
       <div className="ticket-count">
@@ -84,10 +96,8 @@ const BookTickets = ({ movie }) => {
         <label>Enter Ticket Count </label>
         <input
           type="number"
-          min={1}
-          max={availableTickets}
-          value={ticketCount}
-          onChange={handleTicketCountChange}
+          value={ticketCount} // Bind the input value to the state
+          onChange={handleTicketCountChange} // Update the state on input change
         />
       </div>
       <button className="book-tickets-btn" onClick={handleBookTickets}>Book Tickets</button>

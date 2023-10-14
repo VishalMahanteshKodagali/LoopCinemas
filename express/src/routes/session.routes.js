@@ -6,10 +6,14 @@ module.exports = (express, app) => {
     router.get("/", controller.all);
 
     router.delete("/:sessionId",controller.delete);
+    router.get("/:sessionId",controller.getSessionById);
+
     //Sample
     //localhost:4000/api/sessions/1
 
     router.put("/:sessionId",controller.update);
+
+    router.get("/movie/:movieId",controller.getSessionsByMovie);
     //Sample
     //localhost:4000/api/sessions/1
 

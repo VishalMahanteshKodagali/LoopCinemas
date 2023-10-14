@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import MyBookedTickets from "../components/MyBookedTickets";
-import { updateUser, deleteUser, getLoggedInUserDetails,deleteUserMovieReviews } from "../data/repository";
+import { updateUser, deleteUser,getLoggedInUser } from "../data/repository";
 import '../Style/profile.css'; 
 
 
@@ -10,14 +10,15 @@ function MyProfile(props) {
 
   const [user, setUser] = useState({});
   const getUserDetails = async () => {
-    const user = await getLoggedInUserDetails(); 
+    const user = await getLoggedInUser(); 
     console.log(user);
     setUser(user);
   }
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedUser = await getLoggedInUserDetails(); 
+      const fetchedUser = await getLoggedInUser(); 
+      console.log(fetchedUser)
       setUser(fetchedUser);
       setFields({
         username: fetchedUser.username,
@@ -47,7 +48,7 @@ function MyProfile(props) {
 
   useEffect(() => {
     const fetchUserDetails = async () => {
-      const user = await getLoggedInUserDetails();
+      const user = await getLoggedInUser();
       setUser(user);
       setFields({ username: user.username, email: user.email });
     };
@@ -134,8 +135,9 @@ function MyProfile(props) {
     {
       try {
         const updatedUser = await updateUser(user.username, fields);
+        console.log(updatedUser)
         setUser(updatedUser);
-        window.location.reload();
+        //window.location.reload();
         setSuccessMessage("Profile updated successfully.");
         setErrorMessage(null);
         setEditMode(false);

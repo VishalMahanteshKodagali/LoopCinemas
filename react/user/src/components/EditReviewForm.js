@@ -5,7 +5,7 @@ const EditReviewForm = ({ review, onCancel, onUpdate }) => {
   
     const handleInputChange = (event) => {
       const { name, value } = event.target;
-      const updatedValue = name === "rating" ? parseInt(value, 10) : value;
+      const updatedValue = name === "review_rating" ? parseInt(value, 10) : value;
       setEditedReview((prevReview) => ({
         ...prevReview,
         [name]: updatedValue,
@@ -14,6 +14,7 @@ const EditReviewForm = ({ review, onCancel, onUpdate }) => {
   
     const handleSubmit = (event) => {
       event.preventDefault();
+      console.log("INside compo"+JSON.stringify(editedReview))
       onUpdate(editedReview);
     };
   
@@ -23,22 +24,22 @@ const EditReviewForm = ({ review, onCancel, onUpdate }) => {
           <h2>Edit Review</h2>
           <form onSubmit={handleSubmit}>
             <div>
-              <label htmlFor="rating">Rating (1 - 5 stars)</label>
+              <label htmlFor="review_rating">Rating (1 - 5 stars)</label>
               <input
                 type="number"
-                id="rating"
-                name="rating"
+                id="review_rating"
+                name="review_rating"
                 min="1"
                 max="5"
-                value={editedReview.rating}
+                value={editedReview.review_rating}
                 onChange={handleInputChange}
               />
             </div>
             <div>
-              <label htmlFor="comments">Comments</label>
+              <label htmlFor="review_description">Comments</label>
               <textarea
-                id="comments"
-                name="comments"
+                id="review_description"
+                name="review_description"
                 value={editedReview.comments}
                 onChange={handleInputChange}
               />
