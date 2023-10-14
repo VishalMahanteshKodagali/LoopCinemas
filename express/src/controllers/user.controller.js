@@ -42,6 +42,8 @@ exports.create = async (req, res) => {
     username: req.body.username,
     password_hash: hash,
     email: req.body.email,
+    role: "user",
+    isBlocked:0
     //last_name: req.body.lastname
   });
 
