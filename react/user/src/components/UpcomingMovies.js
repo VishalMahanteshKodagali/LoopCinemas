@@ -18,24 +18,7 @@ const UpcomingMovies = () => {
   const handleBookTicket = (movie) => {
     navigate("/booking", { state: { movie } });
   }
-  // Clear user review count from local storage every 10 seconds
-  useEffect(() => {
-  const clearReviewCountInterval = setInterval(() => {
-    const userId = getUser.userId;
-    const updatedReviewCount = {
-      ...userReviewCount,
-      [userId]: 0,
-    };
 
-    setUserReviewCount(updatedReviewCount);
-    localStorage.setItem('userReviewCount', JSON.stringify(updatedReviewCount));
-  }, 10000); 
-
-  // Clear the interval when the component unmounts
-  return () => {
-    clearInterval(clearReviewCountInterval);
-  };
-}, []);
 
   // Hardcoded data for upcoming movies and session times
   const [upcomingMovies, setMovies] = useState([]);
@@ -44,11 +27,8 @@ const UpcomingMovies = () => {
 
   const [showReview, setShowReview] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [userReviewCount, setUserReviewCount] = useState(
-    JSON.parse(localStorage.getItem('userReviewCount')) || {});
-  
-  // Hardcoded ratings data for demonstration 
-  const ratingsData = getMovieReviews();
+
+
 
    // Function to fetch movie reviews using Axios
    const fetchMovieReviews = async () => {
@@ -85,11 +65,7 @@ const UpcomingMovies = () => {
   const handleLeaveReview = (movieTitle) => {
     const userId = getUser.userId; 
     
-    // Check if user has exceeded review limit (3 reviews per user)
-    if (userReviewCount[userId] && userReviewCount[userId] >= 3) {
-      //alert("You have reached the review submission limit.");
-      //return;
-    }
+ 
     setSelectedMovie(movieTitle);
     setShowReview(true);
   };
@@ -100,21 +76,7 @@ const UpcomingMovies = () => {
   };
 
   const handleSubmitReview = async (movieTitle, rating, comments) => {
-    const userId = getUser();
-
-  if (userReviewCount[userId] && userReviewCount[userId] >= 3) {
-    //alert("You have reached the review submission limit.");
-    //return;
-  }
-
-  // Update user's review count
-  const updatedReviewCount = {
-    ...userReviewCount,
-    [userId]: (userReviewCount[userId] || 0) + 1,
-  };
-
-  setUserReviewCount(updatedReviewCount);
-
+    
   // Store the updated review count in local storage
   const username = getUser();
     // Save the review data to a localStorage.

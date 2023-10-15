@@ -13,6 +13,8 @@ const BookTickets = ({ movie,sessions }) => {
   const [selectedSession, setSelectedSession] = useState(0);
   const [availableTickets, setAvailableTickets] = useState(0); // 0 for the first session, 1 for the second
   const user = getLoggedInUserDetails();
+  const [message, setMessage] = useState(""); // State for displaying messages
+
 
   const navigate = useNavigate();
 
@@ -22,24 +24,26 @@ const BookTickets = ({ movie,sessions }) => {
 
 
   const handleSessionChange = async (sessionId) => {
-    if(sessionId != "None"){
+    if(sessionId !== "None"){
       try {
         const response = await axios.get(`${API_HOST}/sessions/`+sessionId)// Replace with the actual endpoint URL
         setAvailableTickets(response.data.session_ticket_count); // Assuming the data is in response.data
         setSelectedSession(sessionId)
         console.log(selectedSession)
+        setMessage(""); // Clear any previous messages
       } catch (error) {
         console.error("Error fetching movie reviews:", error);
       }
     }else{
       setSelectedSession(0)
-
+      setAvailableTickets(0);
+      setMessage(""); // Clear any previous messages
     }
     
   };
  
   const handleBookTickets = async () => { 
-    if(selectedSession != 0){
+    if(selectedSession !== 0){
       if ((availableTickets-ticketCount) >= 0){
         const username = getUser()
   
@@ -51,19 +55,21 @@ const BookTickets = ({ movie,sessions }) => {
           };
           const response = await axios.post(`${API_HOST}/reservations`, reservationData);
       
-          alert("Reservation created successfully!"+response.data);
           await handleSessionChange(selectedSession);
+          setMessage("Reservation created successfully!");
+
     
 
         } catch (error) {
-          alert("Error creating reservation:"+ error);
+          setMessage("We are experiencing a high load on our servers. Please try again later");
+          console.log("Error creating reservation:"+ error);
 
         } 
       }else{
-        alert("The number you selected is more than the available seats")
+        setMessage("The number you selected is more than the available seats")
       }
     }else{
-      alert("Please select a valid session")
+      setMessage("Please select a valid session")
     }
     
     
@@ -102,7 +108,11 @@ const BookTickets = ({ movie,sessions }) => {
       </div>
       <button className="book-tickets-btn" onClick={handleBookTickets}>Book Tickets</button>
       <button className="back-tickets-btn" onClick={goBack}>Back</button>
-    </div>
+      {message && (
+        <div className="message" style={{ color: message === "Reservation created successfully!" ? "green" : "red" }}>
+          {message}
+        </div>
+      )}    </div>
   );
 };
 
