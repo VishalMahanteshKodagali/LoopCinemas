@@ -1,5 +1,6 @@
 import React from "react";
-import UpcomingMovies from "../components/UpcomingMovies";
+import EditUpdateMovies from "../components/EditUpdateMovies";
+// import UpcomingMovies from "../components/UpcomingMovies";
 
 
 function Home(props) {
@@ -21,7 +22,9 @@ function Home(props) {
     <>
     <div className="home-root"> 
       <div className="main-content">
-        <UpcomingMovies />
+        <div>
+        <EditUpdateMovies/>
+        </div>
       </div>
     </div>
     </>

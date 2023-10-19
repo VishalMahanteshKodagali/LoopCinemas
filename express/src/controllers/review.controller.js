@@ -12,6 +12,14 @@ exports.all = async (req, res) => {
   res.json(reviews);
 };
 
+exports.getById = async (req, res) => {
+  // Can use eager loading to join tables if needed, for example:
+   const reviews =  await db.review.findByPk(req.params.reviewId);
+
+  // Learn more about eager loading here: https://sequelize.org/master/manual/eager-loading.html
+
+  res.json(reviews);
+};
 
   exports.create = async (req, res) => {
     const {
@@ -63,7 +71,7 @@ exports.delete = async (req, res) => {
 
 // Update a review in the database by review_id.
 exports.update = async (req, res) => {
-  const reviewId = req.body.review_id; // Assuming you pass reviewId as a URL parameter
+  const reviewId = req.params.reviewId; // Assuming you pass reviewId as a URL parameter
   const updatedData = {
     review_description: req.body.review_description,
     review_rating: req.body.review_rating
@@ -84,3 +92,7 @@ exports.update = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+
+
+

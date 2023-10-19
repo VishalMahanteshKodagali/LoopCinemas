@@ -65,8 +65,8 @@ async function seedData() {
   await db.movie.create({ movie_name: "Gran Turismo" ,image:"./gran_card.png", corouselImage:"./gran.png"});
   await db.movie.create({ movie_name: "Blue Beetle" ,image:"./blue_card.png", corouselImage:"./blue.png"});
   await db.movie.create({ movie_name: "Oppenheimer" ,image:"./oppenheimer_card.png", corouselImage:"./oppenheimer.png"});
-  //hash = await argon2.hash("admin", { type: argon2.argon2id });
-  //await db.user.create({ username: "admin", password_hash: hash, email : "admin@loopcinema.com" });
+  hash = await argon2.hash("admin", { type: argon2.argon2id });
+  await db.user.create({ username: "admin", password_hash: hash, email : "admin@loopcinema.com", role:"admin", isBlocked:"0" });
 
 
 
@@ -80,7 +80,7 @@ async function seedData() {
   await db.session.create({ session_time: "04:00:00", session_ticket_count: "10", movie_id: "3" });
 
   await db.review.create({ review_rating: 4, review_description: "Great movie, loved it!!!!", username: "yashb", movie_id:'1' });
-  await db.review.create({ review_rating: 4, review_description: "Awesome!!!", username: "yashb", movie_id:'2' });
+  await db.review.create({ review_rating: 4, review_description: "Awesome!!!", username: "yashb", movie_id:'2'});
 
 }  
 module.exports = db;

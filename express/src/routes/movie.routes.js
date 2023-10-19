@@ -9,6 +9,9 @@ module.exports = (express, app) => {
     // Create a new post.
     router.post("/", controller.create);
 
+    // Create a new movie 
+    // router.post('/movies', controller.create);
+
     router.delete("/:movieId",controller.delete);
     //Sample
     //localhost:4000/api/movies/1

@@ -13,7 +13,8 @@ exports.all = async (req, res) => {
 
 // Create a movie in the database.
 exports.create = async (req, res) => {
-  const { movie_name } = req.body;
+  // const { movie_name } = req.body;
+  const { movie_name,image,corouselImage } = req.body;
 
   // Check for missing required fields
   if (!movie_name) {
@@ -21,7 +22,8 @@ exports.create = async (req, res) => {
   }
 
   try {
-    const movie = await db.movie.create({ movie_name });
+    // const movie = await db.movie.create({ movie_name });
+    const movie = await db.movie.create({ movie_name,image,corouselImage });
     res.json(movie);
   } catch (error) {
     console.error("Error creating movie:", error);
@@ -29,21 +31,26 @@ exports.create = async (req, res) => {
   }
 };
 
+
 // Update a movie in the database by movie_id.
 exports.update = async (req, res) => {
   const movieId = req.params.movieId; // Assuming you pass movieId as a URL parameter
   const updatedData = {
-    movie_name: req.body.movie_name
+    movie_name: req.body.movie_name,
+    image: req.body.image,
+    corouselImage: req.body.corouselImage
   };
 
   // Check for missing required fields
-  if (!updatedData.movie_name) {
+  if (!updatedData.movie_name || !updatedData.image || !updatedData.corouselImage) {
     return res.status(400).json({ message: "Missing required fields" });
   }
 
   try {
+    console.log(movieId)
     const [updatedRowsCount] = await db.movie.update(updatedData, {
       where: { movie_id: movieId }
+
     });
 
     if (updatedRowsCount === 0) {

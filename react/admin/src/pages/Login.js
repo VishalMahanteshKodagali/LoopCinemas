@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { verifyUser } from "../data/repository";
-import "../Style/login.css";
+import axios from "axios";
 
 function Login(props) {
   const [fields, setFields] = useState({ username: "", password: "" });
@@ -47,8 +47,8 @@ function Login(props) {
   }
 
   return (
-    <div className="login-page">
-      <h1>Adming Login Dashboard</h1>
+    <div>
+      <h1>Login</h1>
       <hr />
       <div className="row">
         <div className="col-md-6">

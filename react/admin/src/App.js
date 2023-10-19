@@ -6,10 +6,14 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import MyProfile from "./pages/MyProfile";
 import Reviews from "./pages/Reviews";
-import Signup from "./pages/Signup";
 import { getUser, removeUser } from "./data/repository";
 import './style.css';
-import Booking from "./pages/Booking";
+import { ApolloProvider } from '@apollo/client';
+import client from './apolloClient';
+import UserList from "./pages/UserList";
+import ReviewsManage from "./pages/ReviewsManage";
+import Reservations from "./pages/Reservations";
+
 
 // Main App Component
 function App() {
@@ -28,6 +32,9 @@ function App() {
   }
 
   return (
+    <ApolloProvider client={client}>
+      
+   
     <div className="d-flex flex-column min-vh-100">
       <Router>
         {/* Navbar component with username and logout function */}
@@ -39,9 +46,9 @@ function App() {
             <Routes>
               <Route path="/" element={<Home username={username} />} />
               <Route path="/login" element={<Login loginUser={loginUser} />} />
-              <Route path="/profile" element={<MyProfile username={username} />} />
-              <Route path="/reviews" element={<Reviews username={username} />} />
-              <Route path="/booking" element={<Booking username={username}/>}/>
+              <Route path="/profile" element={<UserList username={username} />} />
+              <Route path="/reviews" element={<ReviewsManage username={username} />} />
+              <Route path="/reservations" element={<Reservations username={username} />} />
             </Routes>
           </div>
         </main>
@@ -50,6 +57,7 @@ function App() {
         <Footer />
       </Router>
     </div>
+    </ApolloProvider>
   );
 }
 

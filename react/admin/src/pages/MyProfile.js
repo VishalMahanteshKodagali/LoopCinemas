@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import MyBookedTickets from "../components/MyBookedTickets";
 import { updateUser, deleteUser, getLoggedInUserDetails,deleteUserMovieReviews } from "../data/repository";
 import '../Style/profile.css'; 
 
@@ -203,7 +202,6 @@ function MyProfile(props) {
     <div className="profile-edit-container">
       {editMode ? renderEditMode() : renderViewMode()}
       {successMessage && <p className="success-message">{successMessage}</p>}
-      <MyBookedTickets/>
     </div>
   );
 }

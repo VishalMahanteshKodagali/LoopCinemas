@@ -5,11 +5,72 @@ import Review from "./Review";
 import {Carousel} from "react-bootstrap";
 import '../Style/UpcomingMovies.css'; 
 import { useNavigate } from "react-router-dom"; 
+import { gql, useMutation } from "@apollo/client";
 
+
+const ADD_MOVIE_MUTATION = gql`
+  mutation AddMovieToHomepage($movie_name: String!, $image: String!, $corouselImage: String!) {
+    addMovie(movie_name: $movie_name, image: $image, corouselImage: $corouselImage) {
+      movie_name
+      image
+      corouselImage
+    }
+  }
+`;
+
+const DELETE_MOVIE_MUTATION = gql`
+  mutation DeleteMovieFromHomepage($movie_name: String!) {
+    deleteMovie(movie_name: $movie_name) {
+      movie_name
+    }
+  }
+`;
 
 
 
 const UpcomingMovies = () => {
+  const [addMovie, { data, loading, error }] = useMutation(ADD_MOVIE_MUTATION);
+  const [deleteMovie, { data: deleteData, loading: deleteLoading, error: deleteError }] = useMutation(DELETE_MOVIE_MUTATION);
+
+  const [showForm, setShowForm] = useState(false);
+  const [movieTitle, setMovieTitle] = useState("");
+  const [movieImage, setMovieImage] = useState("");
+  const [cardImagePath, setCardImagePath] = useState("");
+
+  const handleAddToHomepage = () => {
+    setShowForm(!showForm);  // Toggle form visibility
+  }
+
+  const handleSubmitMovie = async () => {
+    try {
+      // Call the mutation
+      await addMovie({
+        variables: {
+          movie_name: movieTitle,
+          image: movieImage,
+          corouselImage: cardImagePath
+        }
+      });
+      // If successful, you can update your local state or refetch the list of movies
+      setShowForm(false);
+    } catch (err) {
+      console.error("Error adding movie:", err);
+    }finally {
+      // Reload the page, whether the try block was successful or caught an error
+      window.location.reload();
+    }
+  }
+
+  const handleDeleteMovie = async (movieTitle) => {
+    try {
+      await deleteMovie({ variables: { movie_name: movieTitle } });
+      window.location.reload();
+    } catch (err) {
+      console.error("Error deleting movie:", err);
+    }
+  };
+  
+  
 
   const navigate = useNavigate();
 
@@ -133,9 +194,43 @@ const UpcomingMovies = () => {
             </button>
             )}
             <button onClick={() => handleBookTicket(movie)} className="mx-2">Book Tickets</button>
+            <button onClick={() => handleDeleteMovie(movie.title)} className="mx-2">Delete Movie</button>
           </li>
         ))}
       </ul>
+      <button onClick={handleAddToHomepage}>
+        Add to Homepage
+      </button>
+
+      {showForm && (
+        <div>
+          <label>
+            Movie Title:
+            <input
+              type="text"
+              value={movieTitle}
+              onChange={(e) => setMovieTitle(e.target.value)}
+            />
+          </label>
+          <label>
+            Movie Image Path:
+            <input
+              type="text"
+              value={movieImage}
+              onChange={(e) => setMovieImage(e.target.value)}
+            />
+          </label>
+          <label>
+            Card Image Path:
+            <input
+              type="text"
+              value={cardImagePath}
+              onChange={(e) => setCardImagePath(e.target.value)}
+            />
+          </label>
+          <button onClick={handleSubmitMovie}>Submit Movie</button>
+        </div>
+      )}
       {showReview && (
         <Review
           movieTitle={selectedMovie}

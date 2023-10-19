@@ -5,6 +5,8 @@ module.exports = (express, app) => {
     // Select all reviews.
     router.get("/", controller.all);
   
+    router.get("/:reviewId", controller.getById);
+
     // Create a new review.
     router.post("/", controller.create);
 
@@ -13,10 +15,8 @@ module.exports = (express, app) => {
     //Sample
     //localhost:4000/api/reviews/1
 
-    router.put("/",controller.update);
-    //Sample
-    //localhost:4000/api/reviews/1
-  
+    router.put("/:reviewId",controller.update);
+
     // Add routes to server.
     app.use("/api/reviews", router);
   };
