@@ -30,20 +30,31 @@ function Login(props) {
     console.log(verified)
 
     // If verified login the user.
-    if(verified === true) {
+    if(verified === 0) {
       props.loginUser(fields.username);
       // Navigate to the home page.
       navigate("/");
       return;
-    }
+    }else if(verified === 1){
+      // Reset password field to blank.
+      const temp = { ...fields };
+      temp.password = "";
+      setFields(temp);
 
-    // Reset password field to blank.
+      // Set error message.
+      setErrorMessage("Your account has been disabled. Please contact admin");
+      return;
+    }else{
+       // Reset password field to blank.
     const temp = { ...fields };
     temp.password = "";
     setFields(temp);
 
     // Set error message.
     setErrorMessage("Username and / or password invalid, please try again.");
+    return;
+    }
+   
   }
 
   return (
