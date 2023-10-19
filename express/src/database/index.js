@@ -18,6 +18,7 @@ db.movie = require("./models/movie.js")(db.sequelize, DataTypes);
 db.reservation = require("./models/reservation.js")(db.sequelize, DataTypes);
 db.session = require("./models/session.js")(db.sequelize, DataTypes);
 db.review = require("./models/review.js")(db.sequelize, DataTypes);
+db.movie_click_count = require("./models/movie_click_count.js")(db.sequelize, DataTypes);
 
 
 // Relate post and user.
@@ -31,6 +32,8 @@ db.reservation.belongsTo(db.user, { foreignKey: { name: "username", allowNull: f
 db.reservation.belongsTo(db.session, { foreignKey: { name: "session_id", allowNull: false },onDelete: 'CASCADE'});
 
 db.session.belongsTo(db.movie, { foreignKey: { name: "movie_id", allowNull: false },onDelete: 'CASCADE'});
+
+db.movie_click_count.belongsTo(db.movie, { foreignKey: { name: "movie_id", allowNull: false },onDelete: 'CASCADE'});
 
 
 // Include a sync option with seed data logic included.

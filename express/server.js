@@ -25,6 +25,8 @@ require("./src/routes/review.routes.js")(express, app);
 require("./src/routes/movie.routes.js")(express, app);
 require("./src/routes/session.routes.js")(express, app);
 require("./src/routes/reservation.routes.js")(express, app);
+require("./src/routes/movie_click_count.routes.js")(express, app);
+
 
 
 

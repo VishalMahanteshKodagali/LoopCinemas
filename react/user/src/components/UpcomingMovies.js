@@ -15,7 +15,8 @@ const UpcomingMovies = () => {
 
   const navigate = useNavigate();
 
-  const handleBookTicket = (movie) => {
+  const handleBookTicket = async (movie) => {
+    await axios.post(`${API_HOST}/moviesClickCount/movie/`+movie.movie_id)// Replace with the actual endpoint URL
     navigate("/booking", { state: { movie } });
   }
 
@@ -76,7 +77,7 @@ const UpcomingMovies = () => {
   };
 
   const handleSubmitReview = async (movieTitle, rating, comments) => {
-    
+
   // Store the updated review count in local storage
   const username = getUser();
     // Save the review data to a localStorage.
