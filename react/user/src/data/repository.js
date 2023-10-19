@@ -171,7 +171,7 @@ async function deleteUser(username) {
   try {
     await axios.delete(`${API_HOST}/users/${username}`);
     removeUser();
-    window.location.href = "http://localhost:3003/login";
+    window.location.href = "http://localhost:3000/login";
   } catch (error) {
     console.error("Error deleting user", error);
   }
