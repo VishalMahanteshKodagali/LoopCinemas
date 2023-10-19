@@ -60,6 +60,11 @@ async function startServer(){
             success: Boolean!
             message: String!
         }
+        type MovieClickCount{
+            id: Int!
+            click_count: Int!
+            movie_id: Int!
+        }
         type AverageReviewsPerMovie {
             movie_name: String!
             average_reviews: Float!
@@ -78,8 +83,8 @@ async function startServer(){
             getReviews: [Review!]!
             getSessions: [Session!]!
             getUsers: [User!]!
-            averageReviewsPerMovie: [AverageReviewsPerMovie!]!
-           
+            averageReviewsPerMovie: [AverageReviewsPerMovie!]!  
+            getMovieViews: [MovieClickCount!]!
         }
         
         type Mutation {
@@ -89,12 +94,21 @@ async function startServer(){
             addMovie(movie_name: String!, corouselImage: String, image: String): Movie!
             deleteMovie(movie_id: Int!): DeleteMovieResponse!
             updateMovie(movie_id: Int!, movie_name: String!, image: String!, corouselImage: String!): Movie!
-
         }
+
              
         `,
     resolvers: {
         Query: {
+            getMovieViews: async () => {
+                try {
+                    const response = await axios.get('http://localhost:4000/api/moviesClickCount');
+                    return response.data || [];
+                } catch (error) {
+                    console.error("Failed to fetch sessions", error);
+                    throw new Error("Failed to fetch sessions");
+                }
+            },
             getSessions: async () => {
                 try {
                     const response = await axios.get('http://localhost:4000/api/sessions/');

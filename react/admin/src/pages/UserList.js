@@ -36,17 +36,17 @@ function UserList() {
         updateUserBlockStatus({
             variables: {
                 username: username,
-                isBlocked: currentStatus ? 0 : 1 // toggle the current status
+                isBlocked: currentStatus ? 0 : 1
             }
         })
         .then(response => {
             console.log(`User ${username} block status updated to: ${response.data.updateUserBlockStatus.isBlocked}`);
-        })
+            window.location.reload();
+        }) 
         .catch(error => {
             console.error(`Error updating block status for ${username}:`, error.message);
         });
-
-        window.location.reload();
+      
     };
 
     if (loading) return <p>Loading...</p>;

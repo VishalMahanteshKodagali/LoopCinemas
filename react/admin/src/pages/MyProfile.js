@@ -60,26 +60,15 @@ function MyProfile(props) {
     setEditMode(true);
   };
 
-  // const handleDelete = () => {
-  //   // Delete the user here (you need to implement the deleteUser function)
-  //   deleteUserMovieReviews(user.username);
-  //   deleteUser(user.username);
-  //   setSuccessMessage("Profile deleted successfully.");
-  //   // Redirect to the home page after successful delete
-  //   setTimeout(() => {
-  //     navigate("/");
-  //   }, 3000);
-  // };
-
   const handleDelete = () => {
-    console.log(user.username); // Log the username to debug
+    console.log(user.username);
     if (user.username) {
-     // deleteUserMovieReviews(user.username);
+  
       deleteUser(user.username);
       setSuccessMessage("Profile deleted successfully.");
       // Redirect to the home page after successful delete
       setTimeout(() => {
-        navigate("/");
+        navigate("/home");
       }, 3000);
     } else {
       console.error("Username is undefined");

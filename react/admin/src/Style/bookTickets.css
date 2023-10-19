@@ -3,9 +3,9 @@
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    margin: 20px auto; /* Center the component horizontally */
+    margin: 20px auto; 
     max-width: 300px;
-    text-align: center; /* Center text content */
+    text-align: center; 
   }
   
   .book-tickets h2 {

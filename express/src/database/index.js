@@ -39,7 +39,7 @@ db.movie_click_count.belongsTo(db.movie, { foreignKey: { name: "movie_id", allow
 // Include a sync option with seed data logic included.
 db.sync = async () => {
   // Sync schema. force: true - Add this parameter below if you are facing any issues with sql
-  await db.sequelize.sync({ });
+  await db.sequelize.sync({ force: true});
 
   // Can sync with force if the schema has become out of date - note that syncing with force is a destructive operation.
   // await db.sequelize.sync({ force: true });

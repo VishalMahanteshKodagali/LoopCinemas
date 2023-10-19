@@ -77,10 +77,12 @@ async function verifyUser(username, password) {
     
     console.log(apiUrl);
     // If the request is successful, set the user and return true
-    if (response.data) {
+    if (response.data && response.data.role === 'admin' ) {
       setUser(response.data.username); // Assuming response.data contains the user data
       console.log(response.data)
       return true;
+    }else {
+      console.error('Admin only!');
     }
     
   } catch (error) {

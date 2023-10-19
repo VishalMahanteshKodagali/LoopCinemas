@@ -33,8 +33,6 @@ function App() {
 
   return (
     <ApolloProvider client={client}>
-      
-   
     <div className="d-flex flex-column min-vh-100">
       <Router>
         {/* Navbar component with username and logout function */}
@@ -44,8 +42,9 @@ function App() {
           <div className="container my-3">
             {/* Define routes for different pages */}
             <Routes>
-              <Route path="/" element={<Home username={username} />} />
-              <Route path="/login" element={<Login loginUser={loginUser} />} />
+              <Route path="/" element={<Login loginUser={loginUser} />} />
+              <Route path="/home" element={<Home username={username} />} />
+              {/* <Route path="/login" element={<Login loginUser={loginUser} />} /> */}
               <Route path="/profile" element={<UserList username={username} />} />
               <Route path="/reviews" element={<ReviewsManage username={username} />} />
               <Route path="/reservations" element={<Reservations username={username} />} />

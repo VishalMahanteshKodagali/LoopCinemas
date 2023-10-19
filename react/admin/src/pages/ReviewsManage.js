@@ -57,7 +57,7 @@ function ReviewsManage() {
     const [editDescription, setEditDescription] = useState("");
     const [editRating, setEditRating] = useState(0);
     const handleChartClick = () => {
-        setShowTable(!showTable);  // toggle the table visibility
+        setShowTable(!showTable); 
     };
    
     if (loading) return <p>Loading...</p>;
@@ -109,13 +109,12 @@ function ReviewsManage() {
     const reviewsCounts = Object.values(reviewsPerMovie);
 
     const chartData = {
-    // labels: movieIds,
-    labels: movieNames,  // Updated this line
+    labels: movieNames,  
     datasets: [
         {
             label: 'Number of Reviews',
             data: reviewsCounts,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)', // Change as per your preference
+            backgroundColor: 'rgba(75, 192, 192, 0.2)', 
             borderColor: 'rgba(75, 192, 192, 1)',
             borderWidth: 1
         }
@@ -151,7 +150,7 @@ function ReviewsManage() {
                     <tbody className='reviews-body-edit'>
                         {data.getReviews.map(review => (
                             <tr key={review.review_id}>
-                                <td>{review.review_id}</td> {/* New Cell for Review ID */}
+                                <td>{review.review_id}</td> 
                                 <td>{moviesMap[review.movie_id]}</td>
                                 <td>
                                     {editing === review.review_id ? (

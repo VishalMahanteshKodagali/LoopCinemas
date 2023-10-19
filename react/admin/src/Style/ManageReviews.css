@@ -12,21 +12,11 @@
     max-width: 800px;
     padding: 20px;
     border-radius: 10px;
-
-    /* Gradient background for a sleeker look */
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-
-    /* Box shadow with a stronger emphasis on the Y-axis for a floating feel */
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15), 0 3px 6px rgba(0, 0, 0, 0.1);
-
-    /* Subtle inner shadow for an inset effect */
     box-shadow: inset 0 -3px 6px rgba(0, 0, 0, 0.05);
-
-    /* Transitions for smoother effects on hover */
     transition: all 0.3s ease-in-out;
 }
-
-/* Slight scale and shadow increase on hover for interaction feedback */
 .plot-reviews-per-movie:hover {
     transform: scale(1.02);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), 0 5px 8px rgba(0, 0, 0, 0.1);
@@ -46,18 +36,18 @@
 }
 
 .table-reviews th {
-    background-color: #f44336; /* red */
+    background-color: #f44336;
     color: #fff;
     font-weight: 600;
 }
 
 .table-reviews tbody .reviews-body-edit tr:hover {
-    background-color: #ffebee; /* light red */
+    background-color: #ffebee; 
     cursor: pointer;
 }
 
 button {
-    background-color: #f44336; /* red */
+    background-color: #f44336; 
     color: #fff;
     border: none;
     padding: 10px 15px;
@@ -67,7 +57,7 @@ button {
 }
 
 button:hover {
-    background-color: #d32f2f; /* darker red */
+    background-color: #d32f2f; 
 }
 
 button:active {
@@ -84,6 +74,6 @@ input[type="number"] {
 
 textarea:focus,
 input[type="number"]:focus {
-    border: 1px solid #f44336; /* red */
+    border: 1px solid #f44336; 
     outline: none;
 }

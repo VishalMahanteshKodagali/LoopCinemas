@@ -14,23 +14,16 @@ function Signup(props) {
   const [successMessage, setSuccessMessage] = useState(null);
   const navigate = useNavigate();
 
-  // Generic change handler.
   const handleInputChange = (event) => {
     const name = event.target.name;
     const value = event.target.value;
-
-    // Copy fields.
     const temp = { ...fields };
-
-    // Update field and state.
     temp[name] = value;
     setFields(temp);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    // Perform form validation
     const validationErrors = {};
     if (!fields.username.trim()) {
       validationErrors.username = "Username is required";
@@ -74,7 +67,7 @@ function Signup(props) {
       // Clear success message after a few seconds
       setTimeout(() => {
         setSuccessMessage(null);
-        navigate("/");
+        navigate("/home");
       }, 3000);
     }catch(error){
       console.error("Error during registration:", error);

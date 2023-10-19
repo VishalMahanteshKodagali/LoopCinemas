@@ -75,6 +75,23 @@ export default function Reservations() {
         }]
     };
 
+    const getSessionDetail = (session_id, detail = "movie_name") => {
+        const session = sessionData.getSessions.find(s => s.session_id === session_id);
+        if (!session) return null;
+    
+        if (detail === "movie_name") {
+            const movie = movieData.getMovies.find(m => m.movie_id === session.movie_id);
+            return movie ? movie.movie_name : null;
+        }
+    
+        if (detail === "session_time") {
+            return session.session_time;
+        }
+    
+        return null;
+    };
+    
+
 
 
   
@@ -92,7 +109,6 @@ export default function Reservations() {
             <Bar data={chartData} />
             <p>Click on the chart for more details...</p>
         </div>
-        {/* Step 3: Conditionally render the table */}
         {showTable && (
          <table className='table-reservations'>
            <thead>
@@ -100,7 +116,7 @@ export default function Reservations() {
                <th>Reservation ID</th>
                <th>Ticket Count</th>
                <th>Username</th>
-               <th>Session ID</th>
+               <th>Session ID & Time</th>
                <th>Movie Name</th>
              </tr>
            </thead>
@@ -110,7 +126,7 @@ export default function Reservations() {
                  <td>{reservation.reservation_id}</td>
                  <td>{reservation.reservation_ticket_count}</td>
                  <td>{reservation.username}</td>
-                 <td>{reservation.session_id}</td>
+                 <td>{"ID:"+reservation.session_id+" "+"Session Time:"+getSessionDetail(reservation.session_id, "session_time")}</td>
                  <td>{getMovieName(reservation.session_id)}</td>
                </tr>
              ))}
