@@ -92,9 +92,13 @@ async function verifyUser(username, password) {
     
     // If the request is successful, set the user and return true
     if (response.data) {
-      setUser(response.data)
-   
-      return true;
+      if(response.data.role === "user" && response.data.isBlocked === 0)
+      {
+        setUser(response.data)
+        return 0;
+      }else{
+        return 1;
+      }
     }
     
   } catch (error) {
@@ -102,7 +106,7 @@ async function verifyUser(username, password) {
     console.error('Error during authentication:', error);
   }
   // Return false if the authentication failed
-  return false;
+  return 2;
 }
 async function getUserBookings() {
   // Define the URL for your API login endpoint
@@ -171,7 +175,7 @@ async function deleteUser(username) {
   try {
     await axios.delete(`${API_HOST}/users/${username}`);
     removeUser();
-    window.location.href = "http://localhost:3003/login";
+    window.location.href = "http://localhost:3000/login";
   } catch (error) {
     console.error("Error deleting user", error);
   }

@@ -125,12 +125,14 @@ const UpcomingMovies = () => {
           <li key={index}>
             <MovieItem title={movie.title} sessionTime={movie.sessionTime} image ={movie.image} />
             <p>Average Rating: {averageRatings[movie.movie_name].toFixed(1)} stars</p>
-            {getLoggedInUserDetails()    && (
+            {getUser() &&  (
               <button onClick={() => handleLeaveReview(movie.movie_id)}>
               Leave Review
             </button>
             )}
+            {getUser() &&   (
             <button onClick={() => handleBookTicket(movie)} className="mx-2">Book Tickets</button>
+            )}
           </li>
         ))}
       </ul>
